@@ -1,4 +1,4 @@
 # DeFi yield farming project
 
 
-Descrbtion of the course project
+Description of the course project
