@@ -12,10 +12,31 @@ contract DecentralBank {
     Tether public tether;
     RWD public rwd;
 
+    address[] public stakers;
+
+    mapping(address => uint) public stakingBalance;
+    mapping(address => bool) public hasStaked;
+    mapping(address => bool) public isStaking;
+
     
     constructor(RWD _rwd, Tether _tether) public  {
         rwd = _rwd;
         tether = _tether;
+    }
+
+
+    function depositToken(uint _value) public {
+
+        require(_value > 0, "Deposit amount cannot be 0 ");
+        tether.transferFrom(msg.sender, address(this), _value);
+        stakingBalance[msg.sender] = stakingBalance[msg.sender] + _value;
+
+
+        if(!hasStaked[msg.sender]) {
+            stakers.push(msg.sender);
+        }
+        hasStaked[msg.sender] = true;
+        isStaking[msg.sender] = true;
     }
     
 }
