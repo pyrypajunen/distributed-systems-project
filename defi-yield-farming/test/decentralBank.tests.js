@@ -86,6 +86,28 @@ contract('DecentralBank', ([owner, investor]) => {
         result = await decentralBank.isStaking(investor)
         assert.equal(result, true, "Staking has not started yet!")
 
+        // issue tokens
+        await decentralBank.issueToken({from: owner})
+
+        // ensure that only owner can call this
+        await decentralBank.issueToken({from: investor}).should.be.rejected
+
+
+        // unstakeTokens function tests
+        await decentralBank.unstakeTokens({from: investor})
+
+        // check unstakingBalance
+        result = await tether.balanceOf(investor)
+        assert.equal(result.toString(), convertToEth('100'), "Investor current balance")
+
+        // Check the updated balance of DB
+        result = await tether.balanceOf(decentralBank.address)
+        assert.equal(result.toString(), convertToEth('0'), "DB current balance")
+
+        // check staking balance
+        result = await decentralBank.isStaking(investor)
+        assert.equal(result.toString(), 'false', "investor do not staking.")
+
        })
     })
 })
