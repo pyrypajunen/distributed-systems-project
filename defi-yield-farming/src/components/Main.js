@@ -15,12 +15,12 @@ class Main extends Component {
                     </thead>
                     <tbody>
                         <tr style={{color: "black"}}>
-                            <td>{window.web3.utils.fromWei(this.props.stakingBalance, 'ether')} USDT</td>
-                            <td>{window.web3.utils.fromWei(this.props.rwdBalance, 'ether')} RWD</td>
+                            <td>{window.web3.utils.fromWei(this.props.stakingBalance)} USDT</td>
+                            <td>{window.web3.utils.fromWei(this.props.rwdBalance)} RWD</td>
                         </tr>
                     </tbody>
                 </table>
-                <div className='card mb-2' style={{opacity: '.9'}}>
+                <div className='card mb-3' style={{opacity: '1.9'}}>
                     <form onSubmit={(event) => {
                             event.preventDefault()
                             let amount
@@ -32,7 +32,7 @@ class Main extends Component {
                         <div style={{borderSpace: '0 1em'}}>
                             <label className='float-left' style={{marginLeft: '15px'}}><b>Stake Tokens</b></label>
                             <span className='float-right' style={{marginRight: '8px'}}>
-                                 Balance: {window.web3.utils.fromWei(this.props.tetherBalance, 'ether')}
+                                 Balance: {window.web3.utils.fromWei(this.props.tetherBalance)}
                             </span>
                             <div className='input-group mb-4'>
                                 <input
@@ -47,7 +47,7 @@ class Main extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <button type='submit' className='btn btn-primary btn-lg btn-block'>Stake</button>
+                            <button type='submit' class='btn btn-primary btn-lg btn-block"'>Stake</button>
                         </div>
                     </form>
                     <button
@@ -55,9 +55,11 @@ class Main extends Component {
                         event.preventDefault()
                         this.props.unstakeTokens()
                     }}
-                     type='submit' className='btn btn-primary btn-lg btn-block'>Withdraw</button>
+                     type='submit' className='btn btn-primary btn-lg btn-block"'>Withdraw</button>
                     <div className='card-body text-center' style={{color:'blue'}}>
-                        AIRDROP <Airdrop stakingBalance={this.props.stakingBalance}/>
+                        AIRDROP <Airdrop stakingBalance={this.props.stakingBalance}
+                        issueTokens={this.props.issueTokens}/> 
+                        {console.log("Come here")}
                     </div>
                 </div>
             </div>
