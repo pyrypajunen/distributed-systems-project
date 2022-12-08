@@ -121,7 +121,7 @@ class App extends Component {
     render() {
         let content
         {this.state.loading ? content = <p id='loader' className='text-center' style={{margin: '30px'}}> 
-        Connect your MetaMask wallet, Please.</p> : content = <Main 
+        Connecting your MetaMask wallet, Please.</p> : content = <Main 
         tetherBalance = {this.state.tetherBalance}
         rwdBalance = {this.state.rwdBalance}
         stakingBalance = {this.state.stakingBalance}

@@ -7,7 +7,7 @@ class Navbar extends Component {
                 <a className='navbar-brand col-sm-3 col-md-2 mr-0' 
                 style={{color:'white'}}
                 href='/#'>
-                &nbsp; DAPP Yield Staking (Decentralized Banking)
+                &nbsp; DAPP Yield Farming (Decentralized Banking)
                 </a>
                 <ul className='navbar-nav px-3'>
                     <li>
