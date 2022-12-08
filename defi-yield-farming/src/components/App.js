@@ -90,6 +90,7 @@ class App extends Component {
         this.state.tether.methods.approve(this.state.decentralBank._address, amount).send({from: this.state.account}).on('transactionHash', (hash) => {
             this.state.decentralBank.methods.depositTokens(amount).send({from: this.state.account}).on('transactionHash', (hash) => {
                 this.setState({loading:false})
+                window.location.reload();
             })
         })
          
@@ -99,8 +100,18 @@ class App extends Component {
         this.setState({loading: true })
         this.state.decentralBank.methods.unstakeTokens().send({from: this.state.account}).on('transactionHash', (hash) => {
             this.setState({loading:false})
+            window.location.reload();
         }) 
     }
+
+    //Release some RWD tokens after AIRDROP
+    issueTokens = () => {
+        this.setState({ loading: true });
+        this.state.decentralBank.methods.issueTokens().send({ from: this.state.account }).on("transactionHash", (hash) => {
+            this.setState({ loading: false });
+            window.location.reload();
+          });
+      };
 
     constructor(props) {
         super(props)
@@ -121,20 +132,21 @@ class App extends Component {
     render() {
         let content
         {this.state.loading ? content = <p id='loader' className='text-center' style={{margin: '30px'}}> 
-        Connecting your MetaMask wallet, Please.</p> : content = <Main 
+        Connect your MetaMask wallet, Please.</p> : content = <Main 
         tetherBalance = {this.state.tetherBalance}
         rwdBalance = {this.state.rwdBalance}
         stakingBalance = {this.state.stakingBalance}
         stakeTokens = {this.stakeTokens}
         unstakeTokens = {this.unstakeTokens}
         decentralBankContract={this.decentralBank}
+        issueTokens = {this.issueTokens}
         />}
         return (
             <div>
                 <NavBar account = {this.state.account}/>
                     <div className='container-fluid mt-5' >
-                        <div className='row'>
-                            <main role= 'main' className='col-lg-12 ml-auto mr-auto' style={{maxWidth: '500px', minHeight: '70vm'}}>
+                        <div className='h-100 d-flex align-items-center justify-content-center'>
+                            <main role= 'main' className='col-lg-12 ml-auto mr-auto' style={{maxWidth: '500px', minHeight: '100vm'}}>
                                 <div>
                                     {content}
                                 </div>
