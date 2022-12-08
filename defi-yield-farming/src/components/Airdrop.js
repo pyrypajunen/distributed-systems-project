@@ -4,7 +4,7 @@ class Airdrop extends Component {
 
     constructor() {
         super()
-        this.state = {time: {}, seconds: 20 };
+        this.state = {time: {}, seconds: 40 };
         this.timer = 0;
         this.startTimer = this.startTimer.bind(this);
         this.countDown = this.countDown.bind(this);
@@ -55,15 +55,12 @@ class Airdrop extends Component {
 
     airdropReleaseTokens() {
         let stakingB = this.props.stakingBalance
-        if(stakingB >= '50000000000000000000') {
+        if(stakingB >= '10000000') {
             this.startTimer()
         }
     }
 
-
-
     render() {
-        this.airdropReleaseTokens()
         return (
             <div style={{color:'black'}}>{this.state.time.m}:{this.state.time.s} 
             </div>
