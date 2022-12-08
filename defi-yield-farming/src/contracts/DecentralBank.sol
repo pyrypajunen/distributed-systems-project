@@ -28,7 +28,7 @@ contract DecentralBank {
     }
 
 
-    function depositToken(uint _value) public {
+    function depositTokens(uint _value) public {
 
         require(_value > 0, "Deposit amount cannot be 0 ");
         tether.transferFrom(msg.sender, address(this), _value);

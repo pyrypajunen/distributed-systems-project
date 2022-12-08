@@ -8,6 +8,7 @@ import NavBar from './Navbar.js'
 import Tether from '../truffle_abis/Tether.json'
 import RWD from '../truffle_abis/RWD.json'
 import DB from '../truffle_abis/DecentralBank.json'
+//import BackAnimation from "backAnimation.js"
 
 
 class App extends Component {
@@ -34,19 +35,19 @@ class App extends Component {
     async loadBlockchainData() {
         const web3 = window.web3
         const accounts = await web3.eth.getAccounts()
-        console.log(accounts)
+        //console.log(accounts)
         this.setState({account: accounts[0]})
         const networkId = await web3.eth.net.getId()
     
         // Load Tether TOKEN
         const tetherData = Tether.networks[networkId]
-        console.log(tetherData)
+        //console.log('Tether',tetherData)
         if(tetherData) {
           const tether = new web3.eth.Contract(Tether.abi, tetherData.address)
           this.setState({tether})
           let tetherBalance = await tether.methods.balanceOf(this.state.account).call()
           this.setState({ tetherBalance: tetherBalance.toString()})
-          console.log("Current balance in Wei",tetherBalance)
+          //console.log("Current balance in Wei",tetherBalance)
         } else {
           window.alert("tether contract not deployed!")
         }
@@ -59,27 +60,46 @@ class App extends Component {
             this.setState({rwd})
             let rwdBalance = await rwd.methods.balanceOf(this.state.account).call()
             this.setState({ rwdBalance: rwdBalance.toString()})
-            console.log('Current rwd balance:', rwdBalance)
+            //console.log('Current rwd balance:', rwdBalance)
         } else {
             window.alert('Reward Token contract not deployed!')
         }
 
         // load Decentral bank contract
         const dbData = DB.networks[networkId]
+        console.log('DB', dbData)
         if (dbData) {
-            const db = new web3.eth.Contract(DB.abi, dbData.address)
-            this.setState({db})
-            let dbBalance = await db.methods.stakingBalance(this.state.account).call()
+            const decentralBank = new web3.eth.Contract(DB.abi, dbData.address)
+            this.setState({decentralBank})
+            let dbBalance = await decentralBank.methods.stakingBalance(this.state.account).call()
             this.setState({stakingBalance: dbBalance.toString()})
-            console.log('Current staking balance',dbBalance)
+            //console.log('Current staking balance',dbBalance)
         } else {
             window.alert('DB contract not deployed!')
         }
 
-        // set this loading to true, if all contracts are deployed!
+        // set this loading to false, if all contracts are deployed!
         this.setState({loading: false})
-        console.log("All contracts are deployed!")
+       //console.log("All contracts are deployed!")
 
+    }
+
+    // Staking and unstaking functions
+    stakeTokens = (amount) => {
+        this.setState({loading: true})
+        this.state.tether.methods.approve(this.state.decentralBank._address, amount).send({from: this.state.account}).on('transactionHash', (hash) => {
+            this.state.decentralBank.methods.depositTokens(amount).send({from: this.state.account}).on('transactionHash', (hash) => {
+                this.setState({loading:false})
+            })
+        })
+         
+    }
+
+    unstakeTokens = () => {
+        this.setState({loading: true })
+        this.state.decentralBank.methods.unstakeTokens().send({from: this.state.account}).on('transactionHash', (hash) => {
+            this.setState({loading:false})
+        }) 
     }
 
     constructor(props) {
@@ -97,17 +117,24 @@ class App extends Component {
         }
     }
 
+    // React code goes here
     render() {
         let content
-        {this.state.loading ? content =
-        <p id='loader' className='text-center' style={{margin: '30px'}}> 
-        LOADING THE PAGE... PLEASE WAIT!!!</p> : content = <Main/>}
+        {this.state.loading ? content = <p id='loader' className='text-center' style={{margin: '30px'}}> 
+        Connect your MetaMask wallet, Please.</p> : content = <Main 
+        tetherBalance = {this.state.tetherBalance}
+        rwdBalance = {this.state.rwdBalance}
+        stakingBalance = {this.state.stakingBalance}
+        stakeTokens = {this.stakeTokens}
+        unstakeTokens = {this.unstakeTokens}
+        decentralBankContract={this.decentralBank}
+        />}
         return (
             <div>
                 <NavBar account = {this.state.account}/>
                     <div className='container-fluid mt-5' >
                         <div className='row'>
-                            <main role= 'main' className='col-lg-12 ml-auto mr-auto' style={{maxWidth: '600px', minHeight: '100vm'}}>
+                            <main role= 'main' className='col-lg-12 ml-auto mr-auto' style={{maxWidth: '500px', minHeight: '70vm'}}>
                                 <div>
                                     {content}
                                 </div>
