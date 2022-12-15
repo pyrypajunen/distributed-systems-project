@@ -23,10 +23,12 @@ class Main extends Component {
                 <div className='card mb-3' style={{opacity: '1.9'}}>
                     <form onSubmit={(event) => {
                             event.preventDefault()
-                            let amount
+                            let amount,duration
                             amount = this.input.value.toString()
                             amount = window.web3.utils.toWei(amount, 'ether')
-                            this.props.stakeTokens(amount)
+                            duration = this.duration.value
+                            console.log(amount, duration)
+                            this.props.stakeTokens(amount,duration)
                         }}
                      className='mb-3'>
                         <div style={{borderSpace: '0 1em'}}>
@@ -45,6 +47,16 @@ class Main extends Component {
                                         <img alt='tether' src={tether} height='34'/>
                                         &nbsp;&nbsp;USDT
                                     </div>
+                                </div>
+                            </div>
+                            <div className='input-group mb-4'>
+                                <input
+                                ref={(input) => {this.duration = input}} 
+                                type='text' 
+                                placeholder='0' 
+                                required/>
+                                <div className='input-group-open'>
+                                    seconds
                                 </div>
                             </div>
                             <button type='submit' class='btn btn-primary btn-lg btn-block"'>Stake</button>

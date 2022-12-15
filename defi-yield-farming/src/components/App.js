@@ -71,9 +71,9 @@ class App extends Component {
         if (dbData) {
             const decentralBank = new web3.eth.Contract(DB.abi, dbData.address)
             this.setState({decentralBank})
-            let dbBalance = await decentralBank.methods.stakingBalance(this.state.account).call()
+            let dbBalance = await decentralBank.methods.stakingBalance().call({from: this.state.account})
+            console.log('Current staking balance',dbBalance)
             this.setState({stakingBalance: dbBalance.toString()})
-            //console.log('Current staking balance',dbBalance)
         } else {
             window.alert('DB contract not deployed!')
         }
@@ -85,16 +85,21 @@ class App extends Component {
     }
 
     // Staking and unstaking functions
-    stakeTokens = (amount) => {
+    stakeTokens = (amount,duration) => {
         this.setState({loading: true})
         this.state.tether.methods.approve(this.state.decentralBank._address, amount).send({from: this.state.account}).on('transactionHash', (hash) => {
-            this.state.decentralBank.methods.depositTokens(amount).send({from: this.state.account}).on('transactionHash', (hash) => {
+            this.state.decentralBank.methods.depositTokens(amount,duration).send({from: this.state.account}).on('transactionHash', (hash) => {
                 this.setState({loading:false})
                 window.location.reload();
             })
         })
          
     }
+
+    // stakingBalance = () => {
+    //     var dbBalance = this.state.decentralBank.methods.stakingBalance().call({from: this.state.account})
+    //     this.setState({stakingBalance: dbBalance.toString()})
+    // }
 
     unstakeTokens = () => {
         this.setState({loading: true })
