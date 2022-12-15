@@ -27,6 +27,7 @@ class Airdrop extends Component {
         // 2. stop counting when we hit zero
         if(seconds === 0) {
             clearInterval(this.timer)
+            this.props.issueTokens()
         }
     }
 
@@ -59,8 +60,6 @@ class Airdrop extends Component {
             this.startTimer()
         }
     }
-
-    updateRWD
 
     render() {
         {this.airdropReleaseTokens()}
